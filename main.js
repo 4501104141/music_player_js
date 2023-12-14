@@ -1,6 +1,6 @@
 /**
- * 1. Render song
- * 2. Scroll top
+ * 1. Render song -> Done
+ * 2. Scroll top -> Done
  * 3. Play / pause / seek
  * 4. CD rotate
  * 5. Next / prev
@@ -17,14 +17,91 @@ const app = {
         {
             name: "Cho tôi lang thang",
             singer: "Ngọt, Đen Vâu",
-            path: "./assets/music/Cho-Toi-Lang-Thang-Ngot-Den.mp3",
+            path: "./assets/music/ChoToiLangThangNgotDen.mp3",
             image: "./assets/img/ChoToiLangThang.jpg"
         },
         {
             name: "Đi Về Nhà",
             singer: "Đen x JustaTee ",
-            path: "./assets/music/Di-Ve-Nha-Den-JustaTee.mp3",
+            path: "./assets/music/DiVeNhaDenJustaTee.mp3",
             image: "./assets/img/DiVeNha.jpg"
-        }
+        },
+        {
+            name: "để tôi ôm em bằng giai điệu này",
+            singer: "Kai Đinh",
+            path: "./assets/music/DeToiOmEmBangGiaiDieuNay.mp3",
+            image: "./assets/img/DeToiOmEmBangGiaiDieuNay.jpg"
+        },
+        {
+            name: "Phố đã lên đền",
+            singer: "Masew",
+            path: "./assets/music/PhoDaLenDenMasewRemix.mp3",
+            image: "./assets/img/PhoDaLenDen.jpg"
+        },
+        {
+            name: "Gác lại âu lo",
+            singer: "DaLab",
+            path: "./assets/music/GacLaiAuLoDaLABMiuLe.mp3",
+            image: "./assets/img/GacLaiAuLo.jpg"
+        },
+        {
+            name: "Có hẹn với thanh xuân",
+            singer: "Monstar",
+            path: "./assets/music/CoHenVoiThanhXuan.mp3",
+            image: "./assets/img/CoHenVoiThanhXuan.jpg"
+        },
+        {
+            name: "Nàng thơ",
+            singer: "Hoàng Dũng",
+            path: "./assets/music/NangThoHoangDung.mp3",
+            image: "./assets/img/NangTho.jpg"
+        },
+        {
+            name: "Răng khôn",
+            singer: "Phí Phương Anh",
+            path: "./assets/music/RangKhonPhiPhuongAnhRIN9.mp3",
+            image: "./assets/img/RangKhonPhiPhuongAnh.jpg"
+        },
+        {
+            name: "Ngày mai em đi",
+            singer: "Soobin",
+            path: "./assets/music/NgayMaiEmDiTouliverMixTouliver.mp3",
+            image: "./assets/img/NgayMaiEmDi.jpg"
+        },
     ],
+    render: function () {
+        const htmls = this.songs.map(song => {
+            return `
+                <div class="song">
+                    <div class="thumb"
+                        style="background-image: url('${song.image}')">
+                    </div>
+                    <div class="body">
+                        <h3 class="title">${song.name}</h3>
+                        <p class="author">${song.singer}</p>
+                    </div>
+                    <div class="option">
+                        <i class="fas fa-ellipsis-h"></i>
+                    </div>
+                </div>
+            `
+        });
+        $('.playlist').innerHTML = htmls.join('');
+    },
+    handleEvents: function () {
+        const cd = $('.cd');
+        const cdWidth = cd.offsetWidth;
+        document.onscroll = function () {
+            const scrollTop = window.scrollY || document.documentElement.scrollTop;
+            const newCdWidth = cdWidth - scrollTop;
+            console.log(newCdWidth);
+            cd.style.width = newCdWidth > 0 ? newCdWidth + 'px' : 0;
+            cd.style.opacity = newCdWidth / cdWidth;
+        }
+    },
+    start: function () {
+        this.handleEvents();
+        this.render();
+    }
 }
+app.start();
