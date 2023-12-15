@@ -104,8 +104,6 @@ const app = {
             }
         })
     },
-    // currentTest: this.songs[this.currentIndex]
-    // ,
     handleEvents: function () {
         const cdWidth = cd.offsetWidth;
         const _this = this;
