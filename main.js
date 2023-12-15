@@ -12,8 +12,15 @@
  */
 const $ = document.querySelector.bind(document);
 const $$ = document.querySelectorAll.bind(document);
+const heading = $('header h2');
+const audio = $('#audio');
+const cdThumb = $('.cd-thumb');
+const cd = $('.cd');
+const player = $('.player')
+const playBtn = $('.btn-toggle-play');
 const app = {
     currentIndex: 0,
+    isPlaying: false,
     songs: [
         {
             name: "Cho tôi lang thang",
@@ -99,19 +106,29 @@ const app = {
     // currentTest: this.songs[this.currentIndex]
     // ,
     handleEvents: function () {
-        const cd = $('.cd');
         const cdWidth = cd.offsetWidth;
+        const _this = this;
+        //Handle scroll
         document.onscroll = function () {
             const scrollTop = window.scrollY || document.documentElement.scrollTop;
             const newCdWidth = cdWidth - scrollTop;
             cd.style.width = newCdWidth > 0 ? newCdWidth + 'px' : 0;
             cd.style.opacity = newCdWidth / cdWidth;
         }
+        //Handle when click play
+        playBtn.onclick = function () {
+            if (_this.isPlaying) {
+                _this.isPlaying = false;
+                audio.pause();
+                player.classList.remove('playing');
+            } else {
+                _this.isPlaying = true;
+                audio.play();
+                player.classList.add('playing');
+            }
+        }
     },
     loadCurrentSong: function () {
-        const heading = $('header h2');
-        const audio = $('#audio');
-        const cdThumb = $('.cd-thumb');
         heading.textContent = this.currentSong.name;
         cdThumb.style.backgroundImage = `url('${this.currentSong.image}')`;
         audio.src = this.currentSong.path;
@@ -119,10 +136,10 @@ const app = {
     start: function () {
         //Defind properties for object
         this.defineProperties();
-        //Listen and handle event
-        this.handleEvents();
         //Upload to UI
         this.loadCurrentSong();
+        //Listen and handle event
+        this.handleEvents();
         //Render playlist
         this.render();
     }
