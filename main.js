@@ -12,7 +12,16 @@
  */
 const $ = document.querySelector.bind(document);
 const $$ = document.querySelectorAll.bind(document);
+const heading = $('header h2');
+const audio = $('#audio');
+const cdThumb = $('.cd-thumb');
+const cd = $('.cd');
+const player = $('.player')
+const playBtn = $('.btn-toggle-play');
+const progress = $('#progress')
 const app = {
+    currentIndex: 0,
+    isPlaying: false,
     songs: [
         {
             name: "Cho tôi lang thang",
@@ -88,19 +97,69 @@ const app = {
         });
         $('.playlist').innerHTML = htmls.join('');
     },
+    defineProperties: function () {
+        Object.defineProperty(this, 'currentSong', {
+            get: function () {
+                return this.songs[this.currentIndex];
+            }
+        })
+    },
+    // currentTest: this.songs[this.currentIndex]
+    // ,
     handleEvents: function () {
-        const cd = $('.cd');
         const cdWidth = cd.offsetWidth;
+        const _this = this;
+        //Handle scroll
         document.onscroll = function () {
             const scrollTop = window.scrollY || document.documentElement.scrollTop;
             const newCdWidth = cdWidth - scrollTop;
-            console.log(newCdWidth);
             cd.style.width = newCdWidth > 0 ? newCdWidth + 'px' : 0;
             cd.style.opacity = newCdWidth / cdWidth;
         }
+        //When song play
+        audio.onplay = function () {
+            _this.isPlaying = true;
+            player.classList.add('playing');
+        }
+        //When song pause
+        audio.onpause = function () {
+            _this.isPlaying = false;
+            player.classList.remove('playing');
+        }
+        //Handle when click play
+        playBtn.onclick = function () {
+            if (_this.isPlaying) {
+                audio.pause();
+            } else {
+                audio.play();
+            }
+        }
+        //When process song is playing
+        audio.ontimeupdate = function () {
+            if (audio.duration) {
+                const progressPresent = Math.floor((audio.currentTime / audio.duration) * 100);
+                progress.value = progressPresent;
+            }
+        }
+        //When rewind the song
+        progress.onchange = function (e) {
+            const seekTime = (audio.duration / 100) * e.target.value;
+            audio.currentTime = seekTime;
+        }
+    },
+    loadCurrentSong: function () {
+        heading.textContent = this.currentSong.name;
+        cdThumb.style.backgroundImage = `url('${this.currentSong.image}')`;
+        audio.src = this.currentSong.path;
     },
     start: function () {
+        //Defind properties for object
+        this.defineProperties();
+        //Upload to UI
+        this.loadCurrentSong();
+        //Listen and handle event
         this.handleEvents();
+        //Render playlist
         this.render();
     }
 }
