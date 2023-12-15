@@ -115,18 +115,25 @@ const app = {
             cd.style.width = newCdWidth > 0 ? newCdWidth + 'px' : 0;
             cd.style.opacity = newCdWidth / cdWidth;
         }
+        //When song play
+        audio.onplay = function () {
+            _this.isPlaying = true;
+            player.classList.add('playing');
+        }
+        //When song pause
+        audio.onpause = function () {
+            _this.isPlaying = false;
+            player.classList.remove('playing');
+        }
         //Handle when click play
         playBtn.onclick = function () {
             if (_this.isPlaying) {
-                _this.isPlaying = false;
                 audio.pause();
-                player.classList.remove('playing');
             } else {
-                _this.isPlaying = true;
                 audio.play();
-                player.classList.add('playing');
             }
         }
+
     },
     loadCurrentSong: function () {
         heading.textContent = this.currentSong.name;
