@@ -18,6 +18,7 @@ const cdThumb = $('.cd-thumb');
 const cd = $('.cd');
 const player = $('.player')
 const playBtn = $('.btn-toggle-play');
+const progress = $('#progress')
 const app = {
     currentIndex: 0,
     isPlaying: false,
@@ -133,7 +134,18 @@ const app = {
                 audio.play();
             }
         }
-
+        //When process song is playing
+        audio.ontimeupdate = function () {
+            if (audio.duration) {
+                const progressPresent = Math.floor((audio.currentTime / audio.duration) * 100);
+                progress.value = progressPresent;
+            }
+        }
+        //When rewind the song
+        progress.onchange = function (e) {
+            const seekTime = (audio.duration / 100) * e.target.value;
+            audio.currentTime = seekTime;
+        }
     },
     loadCurrentSong: function () {
         heading.textContent = this.currentSong.name;
