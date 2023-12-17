@@ -21,9 +21,11 @@ const playBtn = $('.btn-toggle-play');
 const progress = $('#progress');
 const nextBtn = $('.btn-next');
 const prevBtn = $('.btn-prev');
+const randomBtn = $('.btn-random');
 const app = {
     currentIndex: 0,
     isPlaying: false,
+    isRandom: false,
     songs: [
         {
             name: "Cho tôi lang thang",
@@ -158,13 +160,27 @@ const app = {
         }
         //When next song
         nextBtn.onclick = function () {
-            _this.nextSong();
+            if (_this.isRandom) {
+                _this.playRandomSong();
+            } else {
+                _this.nextSong();
+            }
             audio.play();
         }
         //When prev song
         prevBtn.onclick = function () {
-            _this.prevSong();
+            if (_this.isRandom) {
+                _this.playRandomSong();
+            } else {
+                _this.prevSong();
+            }
             audio.play();
+        }
+        //When random song
+        randomBtn.onclick = function (e) {
+            if (_this.isRandom) { _this.isRandom = false; }
+            else { _this.isRandom = true; }
+            randomBtn.classList.toggle('active');
         }
     },
     loadCurrentSong: function () {
@@ -184,6 +200,15 @@ const app = {
         if (this.currentIndex < 0) {
             this.currentIndex = this.songs.length - 1;
         }
+        this.loadCurrentSong();
+    },
+    playRandomSong: function () {
+        let newIndex;
+        do {
+            newIndex = Math.floor(Math.random() * this.songs.length);
+        } while (newIndex === this.currentIndex);
+        console.log(this.currentIndex);
+        this.currentIndex = newIndex;
         this.loadCurrentSong();
     },
     start: function () {
