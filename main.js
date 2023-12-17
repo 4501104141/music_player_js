@@ -207,7 +207,6 @@ const app = {
         do {
             newIndex = Math.floor(Math.random() * this.songs.length);
         } while (newIndex === this.currentIndex);
-        console.log(this.currentIndex);
         this.currentIndex = newIndex;
         this.loadCurrentSong();
     },
