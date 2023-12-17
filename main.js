@@ -18,7 +18,9 @@ const cdThumb = $('.cd-thumb');
 const cd = $('.cd');
 const player = $('.player')
 const playBtn = $('.btn-toggle-play');
-const progress = $('#progress')
+const progress = $('#progress');
+const nextBtn = $('.btn-next');
+const prevBtn = $('.btn-prev');
 const app = {
     currentIndex: 0,
     isPlaying: false,
@@ -154,11 +156,35 @@ const app = {
             const seekTime = (audio.duration / 100) * e.target.value;
             audio.currentTime = seekTime;
         }
+        //When next song
+        nextBtn.onclick = function () {
+            _this.nextSong();
+            audio.play();
+        }
+        //When prev song
+        prevBtn.onclick = function () {
+            _this.prevSong();
+            audio.play();
+        }
     },
     loadCurrentSong: function () {
         heading.textContent = this.currentSong.name;
         cdThumb.style.backgroundImage = `url('${this.currentSong.image}')`;
         audio.src = this.currentSong.path;
+    },
+    nextSong: function () {
+        this.currentIndex++;
+        if (this.currentIndex >= this.songs.length) {
+            this.currentIndex = 0;
+        }
+        this.loadCurrentSong();
+    },
+    prevSong: function () {
+        this.currentIndex--;
+        if (this.currentIndex < 0) {
+            this.currentIndex = this.songs.length - 1;
+        }
+        this.loadCurrentSong();
     },
     start: function () {
         //Defind properties for object
