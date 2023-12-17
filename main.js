@@ -182,6 +182,10 @@ const app = {
             else { _this.isRandom = true; }
             randomBtn.classList.toggle('active');
         }
+        //Handle next song when end.
+        audio.onended = function () {
+            nextBtn.click();
+        }
     },
     loadCurrentSong: function () {
         heading.textContent = this.currentSong.name;
