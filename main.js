@@ -107,6 +107,14 @@ const app = {
     handleEvents: function () {
         const cdWidth = cd.offsetWidth;
         const _this = this;
+        //Handle CD rotate and pause
+        const cdThumbAnimate = cdThumb.animate([
+            { transform: 'rotate(360deg)' }
+        ], {
+            duration: 10000,
+            iterations: Infinity
+        });
+        cdThumbAnimate.pause();
         //Handle scroll
         document.onscroll = function () {
             const scrollTop = window.scrollY || document.documentElement.scrollTop;
@@ -118,11 +126,13 @@ const app = {
         audio.onplay = function () {
             _this.isPlaying = true;
             player.classList.add('playing');
+            cdThumbAnimate.play();
         }
         //When song pause
         audio.onpause = function () {
             _this.isPlaying = false;
             player.classList.remove('playing');
+            cdThumbAnimate.pause();
         }
         //Handle when click play
         playBtn.onclick = function () {
