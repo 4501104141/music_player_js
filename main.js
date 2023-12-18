@@ -22,10 +22,12 @@ const progress = $('#progress');
 const nextBtn = $('.btn-next');
 const prevBtn = $('.btn-prev');
 const randomBtn = $('.btn-random');
+const repeatBtn = $('.btn-repeat')
 const app = {
     currentIndex: 0,
     isPlaying: false,
     isRandom: false,
+    isRepeat: false,
     songs: [
         {
             name: "Cho tôi lang thang",
@@ -182,9 +184,19 @@ const app = {
             else { _this.isRandom = true; }
             randomBtn.classList.toggle('active');
         }
+        //Handle repeat song
+        repeatBtn.onclick = function () {
+            if (_this.isRepeat) { _this.isRepeat = false; }
+            else { _this.isRepeat = true; }
+            repeatBtn.classList.toggle('active');
+        }
         //Handle next song when end.
         audio.onended = function () {
-            nextBtn.click();
+            if (_this.isRepeat) {
+                audio.play();
+            } else {
+                nextBtn.click();
+            }
         }
     },
     loadCurrentSong: function () {
