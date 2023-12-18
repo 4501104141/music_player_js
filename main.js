@@ -169,6 +169,7 @@ const app = {
             }
             audio.play();
             _this.render();
+            _this.scrollToActiveSong();
         }
         //When prev song
         prevBtn.onclick = function () {
@@ -179,6 +180,7 @@ const app = {
             }
             audio.play();
             _this.render();
+            _this.scrollToActiveSong();
         }
         //When random song
         randomBtn.onclick = function (e) {
@@ -199,6 +201,13 @@ const app = {
             } else {
                 nextBtn.click();
             }
+        }
+    },
+    scrollToActiveSong: function () {
+        if (this.currentIndex === 0) {
+            setTimeout(() => { $('.song.active').scrollIntoView({ behavior: "smooth", block: "end" }) }, 300)
+        } else {
+            setTimeout(() => { $('.song.active').scrollIntoView({ behavior: "smooth", block: "nearest" }) }, 300)
         }
     },
     loadCurrentSong: function () {
